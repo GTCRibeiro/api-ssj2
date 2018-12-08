@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\ArticleSsj2;
+use App\Game_ssj2s;
 use App\Http\Requests\ArticleUpdateRequest;
 use Illuminate\Http\Request;
 use Validator;
@@ -32,12 +33,12 @@ class ArticleController extends Controller
     {
         //$articles = ArticleSsj2::all();
 
-        $article = ArticleSsj2::with("autor")->get();
+            $game_ssj2s = Game_ssj2s::with("autor")->get();
 
 
         return response([
             'status' => 1,
-            'data' => $article,
+            'data' => $game_ssj2s,
             'msg' => 'All okay'
         ],200);
     }
@@ -96,17 +97,17 @@ class ArticleController extends Controller
      *
      * Stores an article
      */
-    public function store(ArticleUpdateRequest $request)
+    public function store(Game_ssj2sUpdateRequest $request)
     {
-        $data=$request->only(["title", "description", "image", "user_id"]);
-        $path = $request->file("image")->store("articleImgs");
+        $data = $request -> only(["title", "description", "image", "studio_id"]);
+        $path = $request -> file("image")->store("articleImgs");
         $data["image"] = $path;
 
-        $articleSsj2 = ArticleSsj2::create($data);
+        $game_ssj2s = Game_ssj2s::create($data);
 
         return response([
             'status' => "201",
-            'data' => $articleSsj2,
+            'data' => $game_ssj2s,
             'msg' => 'All okay'
         ],201);
 
@@ -141,14 +142,14 @@ class ArticleController extends Controller
      *
      * Shows articles
      */
-    public function show(ArticleSsj2 $articleSsj2)
+    public function show(Game_ssj2s $game_ssj2s)
     {
 
-        $articleSsj2 = ArticleSsj2::with('autor')->find($articleSsj2 -> id);
+        $game_ssj2s = Game_ssj2s::with('autor')->find($game_ssj2s -> id);
 
         return response([
             'status' => "200",
-            'data' => $articleSsj2,
+            'data' => $game_ssj2s,
             'msg' => 'All okay'
         ],200);
 
@@ -156,7 +157,7 @@ class ArticleController extends Controller
     }
 
 
-    public function edit(ArticleSsj2 $articleSsj2)
+    public function edit(Game_ssj2s $game_ssj2s)
     {
         //
     }
@@ -219,13 +220,13 @@ class ArticleController extends Controller
      *
      * Updates an article
      */
-    public function update(ArticleUpdateRequest $request, ArticleSsj2 $articleSsj2)
+    public function update(Game_ssj2sUpdateRequest $request, Game_ssj2s $game_ssj2s)
     {
         //$articleSsj2->update($request->all());
 
-        $data = $request->only(['title', 'description', 'image','user_id']);
+        $data = $request -> only(['title', 'description', 'image','user_id']);
 
-        $path = $request->file("image")->store("articleImgs");
+        $path = $request -> file("image")->store("articleImgs");
 
         $data["image"] = $path;
 
@@ -248,16 +249,16 @@ class ArticleController extends Controller
             return $validateData-> errors()->all();
         }
     */
-        $articleSsj2-> title = $data['title'];
-        $articleSsj2-> description = $data['description'];
-        $articleSsj2-> image = $data['image'];
-        $articleSsj2-> user_id= $data['user_id'];
+        $game_ssj2s -> title = $data['title'];
+        $game_ssj2s -> description = $data['description'];
+        $game_ssj2s -> image = $data['image'];
+        $game_ssj2s -> user_id= $data['user_id'];
 
-        $articleSsj2->save();
+        $game_ssj2s->save();
 
         return response([
             'status' => "200",
-            'data' => $articleSsj2,
+            'data' => $game_ssj2s,
             'msg' => 'All okay'
         ],200);
     }
@@ -290,13 +291,13 @@ class ArticleController extends Controller
      *
      * Destroys an article
      */
-    public function destroy(ArticleSsj2 $articleSsj2)
+    public function destroy(Game_ssj2s $game_ssj2s)
     {
-        $articleSsj2->delete();
+        $game_ssj2s->delete();
 
         return response([
             'status' => "200",
-            'data' => "Article destroyed",
+            'data' => "Game destroyed",
             'msg' => 'Success'
         ],200);
     }
