@@ -5,10 +5,16 @@ namespace App\Http\Controllers;
 use App\Http\Requests\UserUpdateRequest;
 use App\User;
 use Validator;
-use App\ArticleSsj2;
+use App\Game_ssj2s;
+use Auth;
 
 class UserController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('auth:api');
+    }
+
     /**
      * @OA\Get(
      *      path="/user",
@@ -30,7 +36,7 @@ class UserController extends Controller
      */
     public function index()
     {
-        $users =  User::all();
+        $users = User::all();
 
         return response([
         'status'=> 200,
@@ -320,13 +326,25 @@ class UserController extends Controller
      *
      * Shows articles
      */
-    public function getUserArticles(User $user){
-        $data = ArticleSsj2::with("autor")->get()->where("autor", $user);
+    public function getUserGames(User $user){
+        //$data = Game_ssj2s::with("favoritedBy")->get()->where("id", $user);
+
+        $data = Game_ssj2s::with('id')->whereName($user);
 
         return response([
             'status'=> 200,
             'data' => $data,
             'msg' => 'All ok'
         ]);
+    }
+    public function getAuthUser(){
+        $data = Auth::User();
+
+        return response([
+            'status'=> 200,
+            'data' => $data,
+            'msg' => 'Success'
+        ]);
+
     }
 }

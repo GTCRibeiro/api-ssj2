@@ -6,13 +6,16 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Notifications\Notifiable;
 
-class ArticleSsj2 extends Model
+class Game_ssj2s extends Model
 {
-    use Notifiable, SoftDeletes;
+    //use Notifiable, SoftDeletes;
     //
-    protected $fillable = ['title', 'description','image', 'user_id'];
+    protected $fillable = ['name', 'description','image', 'review'];
 
-    function autor(){
-        return $this->belongsTo('App\User', 'user_id', 'id');
+
+    public function createdBy()
+    {
+        return $this->belongsTo(User::class);
     }
+
 }

@@ -2,13 +2,13 @@
 
 namespace App\Http\Controllers;
 
-use App\ArticleSsj2;
 use App\Game_ssj2s;
-use App\Http\Requests\ArticleUpdateRequest;
+use App\Http\Requests\Game_ssj2sUpdateRequest;
+use App\Http\Resources\Game_ssj2s\Game_ssj2sResource;
 use Illuminate\Http\Request;
 use Validator;
 
-class ArticleController extends Controller
+class Game_ssj2sController extends Controller
 {
     /**
      * @OA\Get(
@@ -31,10 +31,9 @@ class ArticleController extends Controller
      */
     public function index()
     {
-        //$articles = ArticleSsj2::all();
 
-            $game_ssj2s = Game_ssj2s::with("autor")->get();
 
+        $game_ssj2s = Game_ssj2s::all();
 
         return response([
             'status' => 1,
@@ -145,7 +144,9 @@ class ArticleController extends Controller
     public function show(Game_ssj2s $game_ssj2s)
     {
 
-        $game_ssj2s = Game_ssj2s::with('autor')->find($game_ssj2s -> id);
+        //$game_ssj2s = Game_ssj2s::with('gamesFavorited')->find($game_ssj2s -> id);
+        return $game_ssj2s;
+        $game_ssj2s = new Game_ssj2sResource($game_ssj2s);
 
         return response([
             'status' => "200",
@@ -224,7 +225,7 @@ class ArticleController extends Controller
     {
         //$articleSsj2->update($request->all());
 
-        $data = $request -> only(['title', 'description', 'image','user_id']);
+        $data = $request -> only(['title', 'description', 'image','user_id', 'review']);
 
         $path = $request -> file("image")->store("articleImgs");
 
@@ -253,6 +254,7 @@ class ArticleController extends Controller
         $game_ssj2s -> description = $data['description'];
         $game_ssj2s -> image = $data['image'];
         $game_ssj2s -> user_id= $data['user_id'];
+        $game_ssj2s -> review= $data['review'];
 
         $game_ssj2s->save();
 
@@ -290,6 +292,7 @@ class ArticleController extends Controller
      *     )
      *
      * Destroys an article
+     *
      */
     public function destroy(Game_ssj2s $game_ssj2s)
     {
@@ -300,5 +303,14 @@ class ArticleController extends Controller
             'data' => "Game destroyed",
             'msg' => 'Success'
         ],200);
+    }
+    public function getGamesUser(Game_ssj2s $game_ssj2s){
+        $data = User::with("gamesReviewed")->get()->where("createdBy", $game_ssj2s);
+
+        return response([
+            'status'=> 200,
+            'data' => $data,
+            'msg' => 'All ok'
+        ]);
     }
 }

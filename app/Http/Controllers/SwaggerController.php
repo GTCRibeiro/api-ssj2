@@ -36,5 +36,14 @@ use Illuminate\Http\Request;
 
 class SwaggerController extends Controller
 {
-    //
+    public function index()
+    {
+        $users = User::all();
+
+        return response([
+            'status'=> 200,
+            'data' => $users,
+            'msg' => ("All okay")
+        ]);
+    }
 }

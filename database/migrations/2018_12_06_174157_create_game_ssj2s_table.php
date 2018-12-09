@@ -11,6 +11,7 @@ class CreateGamessj2sTable extends Migration
      *
      * @return void
      */
+
     public function up()
     {
         Schema::create('game_ssj2s', function (Blueprint $table) {
@@ -19,9 +20,7 @@ class CreateGamessj2sTable extends Migration
             $table->string ('name');
             $table->text ('description');
             $table->string ('image');
-            $table->string('platform');
-            $table->date('date');
-            $table->string('link');
+            $table->string ('review');
             /*
             //Genre Relation
             $table->integer('genre_id')->unsigned();

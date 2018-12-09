@@ -26,12 +26,12 @@ class Game_ssj2sUpdateRequest extends FormRequest
     public function rules()
     {
         return [
-            //'title' => 'required|max:50',
-            //'description' => 'required|max:255',
-            //'user_id' => 'required|exists:users,id'
+            'title' => 'required|max:50',
+            'description' => 'required|max:255',
+            'user_id' => 'required|exists:users,id'
         ];
     }
-    /*public function messages(){
+    public function messages(){
         return [
             'title.required' => 'O titulo é obrigatório',
             'title.max' => 'Titulo com número inválido de caracteres',
@@ -39,7 +39,7 @@ class Game_ssj2sUpdateRequest extends FormRequest
             'description.required' => 'A descrição é obrigatória',
             'description.max' => 'Descrição com número inválido de caracteres',
         ];
-    }*/
+    }
     protected function failedValidation(Validator $validator)
     {
         throw new HttpResponseException(

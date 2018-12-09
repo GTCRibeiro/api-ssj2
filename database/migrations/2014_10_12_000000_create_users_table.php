@@ -19,9 +19,15 @@ class CreateUsersTable extends Migration
             $table->string('email')->unique();
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
+            $table->integer('game_ssj2s_id');
             $table->rememberToken();
             $table->timestamps();
             $table->softDeletes();
+
+            //$table->integer ('favorite_game_id')->unsigned();
+            //$table->foreign('favorite_game_id')->references('game_id')->on('games');
+            //$table->integer ('favorite_genre_id')->unsigned();
+            //$table->foreign('favorite_genre_id')->references('genre_id')->on('genres');
         });
     }
 

@@ -12,6 +12,8 @@ use Illuminate\Http\Request;
 | is assigned the "api" middleware group. Enjoy building your API!
 |
 */
-Route::resource("user", "UserController");
-Route::resource("articleSsj2", "ArticleController");
-Route::get("/user/{user}/articles", "UserController@getUserArticles");
+Route::resource("users", "UserController");
+Route::resource("reviews", "Game_ssj2sController");
+
+
+Route::get("authUser", "UserController@getAuthUser");
