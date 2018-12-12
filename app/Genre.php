@@ -8,7 +8,7 @@ class Genre extends Model
 {
     protected $fillable = ['name'];
 
-    function whichGameGenre(){
-       return $this->belongsTo('App\Game_ssj2s', 'game_ssj2s_id', 'id');
+    public function whichGameGenre(){
+       return $this->hasMany(Game_ssj2s::class);
     }
 }

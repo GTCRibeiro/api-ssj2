@@ -17,10 +17,13 @@ class CreateGamessj2sTable extends Migration
         Schema::create('game_ssj2s', function (Blueprint $table) {
             $table->increments('id');
 
+            $table->string('title');
             $table->string ('name');
             $table->text ('description');
-            $table->string ('image');
+            $table->string ('image')->default('gameImgs/same.png');
             $table->string ('review');
+            $table->integer ('user_id');
+            $table->integer ('genre_id');
             /*
             //Genre Relation
             $table->integer('genre_id')->unsigned();
@@ -47,6 +50,6 @@ class CreateGamessj2sTable extends Migration
 
     public function down()
     {
-        Schema::dropIfExists('games_ssj2s');
+        Schema::dropIfExists('game_ssj2s');
     }
 }

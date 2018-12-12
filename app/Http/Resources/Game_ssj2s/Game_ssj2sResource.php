@@ -20,7 +20,8 @@ class Game_ssj2sResource extends JsonResource
             'name' => $this -> name,
             'description' => $this -> description,
             'image' => $this -> image,
-            'review' => $this -> text
+            'title' => $this -> title,
+            'review' => $this -> review
         ];
     }
 }

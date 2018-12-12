@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Game_ssj2s;
+use App\User;
 use App\Http\Requests\Game_ssj2sUpdateRequest;
 use App\Http\Resources\Game_ssj2s\Game_ssj2sResource;
 use Illuminate\Http\Request;
@@ -98,9 +99,15 @@ class Game_ssj2sController extends Controller
      */
     public function store(Game_ssj2sUpdateRequest $request)
     {
-        $data = $request -> only(["title", "description", "image", "studio_id"]);
-        $path = $request -> file("image")->store("articleImgs");
-        $data["image"] = $path;
+        $data = $request -> only(["name", "description", "image", "review"]);
+        if(!$path = $request->file('articleImgs')){
+            $data["image"] = 'gameImgs/same.png';
+        }else{
+            $path = $request -> file("image")->store("gameImgs");
+            $data["image"] = $path;
+        }
+
+
 
         $game_ssj2s = Game_ssj2s::create($data);
 
@@ -115,7 +122,7 @@ class Game_ssj2sController extends Controller
 
     /**
      * @OA\Get(
-     *      path="/articleSsj2/{id}",
+     *      path="/reviews/{Game_ssj2s}",
      *      operationId="showsArticle",
      *      tags={"Article"},
      *      summary="Shows an article",
@@ -140,13 +147,25 @@ class Game_ssj2sController extends Controller
      *     )
      *
      * Shows articles
+     * @param  \App\Game_ssj2s  $game_ssj2s
+     * @return \Illuminate\Http\Response
      */
-    public function show(Game_ssj2s $game_ssj2s)
-    {
 
-        //$game_ssj2s = Game_ssj2s::with('gamesFavorited')->find($game_ssj2s -> id);
-        return $game_ssj2s;
-        $game_ssj2s = new Game_ssj2sResource($game_ssj2s);
+    public function show($game_ssj2s)
+    {
+        $game_ssj2s = Game_ssj2s::where('id', 'LIKE',  $game_ssj2s)->first();
+
+        $game_ssj2s->user = User::where('id', 'LIKE', $game_ssj2s->user_id)->first();
+
+
+        //$game_ssj2s = User::with('gamesReviewed')->find($game_ssj2s);
+        //$game_ssj2s = Game_ssj2s::with('createdBy')->find($game_ssj2s);
+
+        //$game_ssj2s = Game_ssj2s::with("createdBy")->find($game_ssj2s);
+
+
+
+        //$game_ssj2s = new Game_ssj2sResource($game_ssj2s);
 
         return response([
             'status' => "200",
@@ -225,37 +244,53 @@ class Game_ssj2sController extends Controller
     {
         //$articleSsj2->update($request->all());
 
-        $data = $request -> only(['title', 'description', 'image','user_id', 'review']);
+        $data = $request -> only(['name', 'title', 'description', 'image', 'review']);
 
-        $path = $request -> file("image")->store("articleImgs");
+        $path = $request -> file("image")->store("gameImgs");
 
         $data["image"] = $path;
 
-       /* $validateData = Validator::make($data,[
-            'title' => 'required|max:50',
-            'description' => 'required|max:255',
-            'user_id' => 'required|exists:users'
-        ],
-        [
-            'title.required' => 'O titulo é obrigatório',
-            'title.max' => 'Titulo com número inválido de caracteres',
-
-            'description.required' => 'A descrição é obrigatória',
-            'description.max' => 'Descrição com número inválido de caracteres',
-
-
-        ]);
-
-        if($validateData->fails()){
-            return $validateData-> errors()->all();
+        if($request->only(['title'])){
+            $game_ssj2s->title = $data['title'];
         }
-    */
-        $game_ssj2s -> title = $data['title'];
+        if($request->only(['name'])){
+            $game_ssj2s->name = $data['name'];
+        }
+        if($request->only(['description'])){
+            $game_ssj2s->description = $data['description'];
+        }
+        if($request->only(['review'])) {
+            $game_ssj2s->review = $data['review'];
+        }
+        if($request->only(['image'])){
+            $game_ssj2s->title = $data['iamge'];
+        }
+
+        /* $validateData = Validator::make($data,[
+             'title' => 'required|max:50',
+             'description' => 'required|max:255',
+             'user_id' => 'required|exists:users'
+         ],
+         [
+             'title.required' => 'O titulo é obrigatório',
+             'title.max' => 'Titulo com número inválido de caracteres',
+
+             'description.required' => 'A descrição é obrigatória',
+             'description.max' => 'Descrição com número inválido de caracteres',
+
+
+         ]);
+
+         if($validateData->fails()){
+             return $validateData-> errors()->all();
+         }
+     */
+        /*$game_ssj2s -> title = $data['title'];
         $game_ssj2s -> description = $data['description'];
         $game_ssj2s -> image = $data['image'];
         $game_ssj2s -> user_id= $data['user_id'];
         $game_ssj2s -> review= $data['review'];
-
+*/
         $game_ssj2s->save();
 
         return response([
@@ -305,7 +340,7 @@ class Game_ssj2sController extends Controller
         ],200);
     }
     public function getGamesUser(Game_ssj2s $game_ssj2s){
-        $data = User::with("gamesReviewed")->get()->where("createdBy", $game_ssj2s);
+        $data = User::with("gamesReviewed")->get()->where("user_id", $game_ssj2s);
 
         return response([
             'status'=> 200,

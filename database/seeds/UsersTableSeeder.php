@@ -16,21 +16,21 @@ class UsersTableSeeder extends Seeder
             [
                 'name' => 'Gonçalo',
                 'email' => 'goncalotribeiro@ua.pt',
-                'password' => bcrypt( 'passwordQueNosQuisermos')
+                'password' => bcrypt( 'password')
             ]
         );
         \App\User::create(
             [
                 'name' => 'Gustavo',
                 'email' => 'gustavotribeiro@ua.pt',
-                'password' => bcrypt( 'passwordQueNosQuisermos')
+                'password' => bcrypt( 'password')
             ]
         );
         \App\User::create(
             [
                 'name' => 'Guilherme',
                 'email' => 'guilhermetribeiro@ua.pt',
-                'password' => bcrypt( 'passwordQueNosQuisermos')
+                'password' => bcrypt( 'password')
             ]
         );
 

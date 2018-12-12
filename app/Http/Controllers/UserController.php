@@ -12,7 +12,7 @@ class UserController extends Controller
 {
     public function __construct()
     {
-        $this->middleware('auth:api');
+        //$this->middleware('auth:api');
     }
 
     /**
@@ -327,9 +327,10 @@ class UserController extends Controller
      * Shows articles
      */
     public function getUserGames(User $user){
-        //$data = Game_ssj2s::with("favoritedBy")->get()->where("id", $user);
+        //$data = Game_ssj2s::with("createdBy")->get()->where("users", $user);
+        //$data = $user->gamesReviewed();
+        $data = User::with("gamesReviewed")->find($user);
 
-        $data = Game_ssj2s::with('id')->whereName($user);
 
         return response([
             'status'=> 200,
@@ -346,5 +347,14 @@ class UserController extends Controller
             'msg' => 'Success'
         ]);
 
+    }
+    public function getUser(User $user){
+        $data = $user;
+
+        return response([
+            'status'=> 200,
+            'data' => $data,
+            'msg' => 'Success'
+        ]);
     }
 }
