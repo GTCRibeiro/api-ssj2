@@ -7,6 +7,7 @@ use Illuminate\Notifications\Notifiable;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Laravel\Passport\HasApiTokens;
+use App\Model\Review;
 
 class User extends Authenticatable
 {
@@ -30,10 +31,11 @@ class User extends Authenticatable
         'password', 'remember_token'
     ];
 
-    public function gamesReviewed()
+    public function reviews()
     {
-        return $this->hasMany(Game_ssj2s::class);
+        return $this->hasMany(Review::class)->orderBy("created_at", "DESC");;
     }
+
 
 
 

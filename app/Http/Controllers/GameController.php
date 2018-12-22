@@ -2,15 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use App\Model\Genre;
+use App\Model\Game;
 use Illuminate\Http\Request;
-use App\Model\Review;
-use App\User;
-use App\Http\Requests\Game_ssj2sUpdateRequest;
 
-//use Validator;
-
-class GenreController extends Controller
+class GameController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -19,11 +14,11 @@ class GenreController extends Controller
      */
     public function index()
     {
-        $genre = Genre::all();
+        $game = Game::with('genre')->get();
 
         return response([
             'status' => 1,
-            'data' => $genre,
+            'data' => $game,
             'msg' => 'All okay'
         ],200);
     }
@@ -52,40 +47,25 @@ class GenreController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  \App\Model\Genre  $genre
+     * @param  \App\Model\Game  $game
      * @return \Illuminate\Http\Response
      */
-    public function show(Genre $genre)
+    public function show(Game $game)
     {
-        //$genre = Genre::where('id', 'LIKE',  $genre)->first();
-
-        //$genre-> game_ssj2s = game_ssj2s::where('id', 'LIKE', $genre->genreId)->first();
-
-        //$genre-> Game_ssj2s::with('whichGameGenre') ->find($genre);
-        //$game_ssj2s = User::with('gamesReviewed')->find($game_ssj2s);
-        //$game_ssj2s = Game_ssj2s::with('createdBy')->find($game_ssj2s);
-
-        //$game_ssj2s = Game_ssj2s::with("createdBy")->find($game_ssj2s);
-
-
-
-        //$game_ssj2s = new ReviewsResource($game_ssj2s);
-
         return response([
             'status' => "200",
-            'data' => $genre,
+            'data' => $game,
             'msg' => 'All okay'
         ],200);
-
     }
 
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\Model\Genre  $genre
+     * @param  \App\Model\Game  $game
      * @return \Illuminate\Http\Response
      */
-    public function edit(Genre $genre)
+    public function edit(Game $game)
     {
         //
     }
@@ -94,10 +74,10 @@ class GenreController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Model\Genre  $genre
+     * @param  \App\Model\Game  $game
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Genre $genre)
+    public function update(Request $request, Game $game)
     {
         //
     }
@@ -105,20 +85,20 @@ class GenreController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Model\Genre  $genre
+     * @param  \App\Model\Game  $game
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Genre $genre)
+    public function destroy(Game $game)
     {
         //
     }
-    public function getGames( $genre){
+    public function GetReviews($game){
 
-        $genre = Genre::with('games')->find($genre);
+        $game = Game::with('reviews')->find($game);
 
         return response([
             'status' => "200",
-            'data' => $genre,
+            'data' => $game,
             'msg' => 'All okay'
         ],200);
     }

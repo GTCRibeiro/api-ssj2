@@ -2,52 +2,44 @@
 
 namespace App\Http\Controllers;
 
-use App\Game_ssj2s;
+use App\Model\Genre;
+use App\Model\Review;
 use App\User;
 use App\Http\Requests\Game_ssj2sUpdateRequest;
-use App\Http\Resources\Game_ssj2s\Game_ssj2sResource;
+//use App\Http\Resources\Reviews\ReviewsResource;
 use Illuminate\Http\Request;
 use Validator;
 
-class Game_ssj2sController extends Controller
+class ReviewController extends Controller
 {
     /**
-     * @OA\Get(
-     *      path="/articleSsj2",
-     *      operationId="showsArticles",
-     *      tags={"Article"},
-     *      summary="Shows article",
-     *      description="Shows an article",
-     *      @OA\Response(
-     *          response=200,
-     *          description="successful operation"
-     *       ),
-     *       @OA\Response(response=400, description="Bad request"),
-     *       security={
-     *           {"api_key_security_example": {}}
-     *       }
-     *     )
+     * Display a listing of the resource.
      *
-     * Shows articles
+     * @return \Illuminate\Http\Response
      */
     public function index()
     {
 
+        $review = Review::with('game','user')->get();
 
-        $game_ssj2s = Game_ssj2s::all();
 
         return response([
             'status' => 1,
-            'data' => $game_ssj2s,
+            'data' => $review,
             'msg' => 'All okay'
         ],200);
     }
 
-
+    /**
+     * Show the form for creating a new resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
     public function create()
     {
         //
     }
+
     /**
      * @OA\Post(
      *      path="/articleSsj2",
@@ -99,85 +91,59 @@ class Game_ssj2sController extends Controller
      */
     public function store(Game_ssj2sUpdateRequest $request)
     {
-        $data = $request -> only(["name", "description", "image", "review"]);
-        if(!$path = $request->file('articleImgs')){
+        $data = $request->only(["name", "description", "image", "review"]);
+        if (!$path = $request->file('articleImgs')) {
             $data["image"] = 'gameImgs/same.png';
-        }else{
-            $path = $request -> file("image")->store("gameImgs");
+        } else {
+            $path = $request->file("image")->store("gameImgs");
             $data["image"] = $path;
         }
-
-
-
-        $game_ssj2s = Game_ssj2s::create($data);
+        $game_ssj2s = Review::create($data);
 
         return response([
             'status' => "201",
             'data' => $game_ssj2s,
             'msg' => 'All okay'
-        ],201);
-
-
+        ], 201);
     }
 
-    /**
-     * @OA\Get(
-     *      path="/reviews/{Game_ssj2s}",
-     *      operationId="showsArticle",
-     *      tags={"Article"},
-     *      summary="Shows an article",
-     *      description="Shows an article",
-     *      @OA\Response(
-     *          response=200,
-     *          description="successful operation"
-     *       ),
-     *      @OA\Parameter(
-     *          name="id",
-     *          description="Article id",
-     *          required=true,
-     *          in="path",
-     *          @OA\Schema(
-     *              type="integer"
-     *          )
-     *      ),
-     *       @OA\Response(response=400, description="Bad request"),
-     *       security={
-     *           {"api_key_security_example": {}}
-     *       }
-     *     )
+
+        /**
+     * Display the specified resource.
      *
-     * Shows articles
-     * @param  \App\Game_ssj2s  $game_ssj2s
+     * @param  \App\Model\Review  $review
      * @return \Illuminate\Http\Response
      */
-
-    public function show($game_ssj2s)
+    public function show(Review $review)
     {
-        $game_ssj2s = Game_ssj2s::where('id', 'LIKE',  $game_ssj2s)->first();
+        //$game_ssj2s = Review::where('id', 'LIKE',  $game_ssj2s)->first();
 
-        $game_ssj2s->user = User::where('id', 'LIKE', $game_ssj2s->user_id)->first();
+        //$game_ssj2s->user = User::where('id', 'LIKE', $game_ssj2s->user_id)->first();
 
 
         //$game_ssj2s = User::with('gamesReviewed')->find($game_ssj2s);
         //$game_ssj2s = Game_ssj2s::with('createdBy')->find($game_ssj2s);
 
-        //$game_ssj2s = Game_ssj2s::with("createdBy")->find($game_ssj2s);
+        //$game_ssj2s = Game_ssj2s::with("createdBy")->find($game_ssj2s);%
 
+        //$game_ssj2s = new ReviewsResource($game_ssj2s);
+        $review = Review::with('user', 'game')->find($review);
 
-
-        //$game_ssj2s = new Game_ssj2sResource($game_ssj2s);
 
         return response([
             'status' => "200",
-            'data' => $game_ssj2s,
+            'data' => $review,
             'msg' => 'All okay'
         ],200);
-
-        //return $articleSsj2;
     }
 
-
-    public function edit(Game_ssj2s $game_ssj2s)
+    /**
+     * Show the form for editing the specified resource.
+     *
+     * @param  \App\Model\Review  $review
+     * @return \Illuminate\Http\Response
+     */
+    public function edit(Review $review)
     {
         //
     }
@@ -240,7 +206,7 @@ class Game_ssj2sController extends Controller
      *
      * Updates an article
      */
-    public function update(Game_ssj2sUpdateRequest $request, Game_ssj2s $game_ssj2s)
+    public function update(Game_ssj2sUpdateRequest $request, Review $game_ssj2s)
     {
         //$articleSsj2->update($request->all());
 
@@ -299,7 +265,6 @@ class Game_ssj2sController extends Controller
             'msg' => 'All okay'
         ],200);
     }
-
     /**
      * @OA\Delete(
      *      path="/articleSsj2/{id}",
@@ -329,7 +294,7 @@ class Game_ssj2sController extends Controller
      * Destroys an article
      *
      */
-    public function destroy(Game_ssj2s $game_ssj2s)
+    public function destroy(Review $game_ssj2s)
     {
         $game_ssj2s->delete();
 
@@ -339,12 +304,14 @@ class Game_ssj2sController extends Controller
             'msg' => 'Success'
         ],200);
     }
-    public function getGamesUser(Game_ssj2s $game_ssj2s){
-        $data = User::with("gamesReviewed")->get()->where("user_id", $game_ssj2s);
+    public function getGamesUser(Review $review)
+    {
+
+        $review = Review::with('user')->get();
 
         return response([
-            'status'=> 200,
-            'data' => $data,
+            'status' => 200,
+            'data' => $review,
             'msg' => 'All ok'
         ]);
     }

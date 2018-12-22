@@ -5,14 +5,14 @@ namespace App\Http\Controllers;
 use App\Http\Requests\UserUpdateRequest;
 use App\User;
 use Validator;
-use App\Game_ssj2s;
+use App\Model\Review;
 use Auth;
 
 class UserController extends Controller
 {
     public function __construct()
     {
-        //$this->middleware('auth:api');
+        $this->middleware('auth:api');
     }
 
     /**
@@ -115,7 +115,7 @@ class UserController extends Controller
 
     /**
      * @OA\Get(
-     *      path="/user/{id}",
+     *      path="/users/{id}",
      *      operationId="showsUser",
      *      tags={"User"},
      *      summary="Shows a user",
@@ -329,7 +329,7 @@ class UserController extends Controller
     public function getUserGames(User $user){
         //$data = Game_ssj2s::with("createdBy")->get()->where("users", $user);
         //$data = $user->gamesReviewed();
-        $data = User::with("gamesReviewed")->find($user);
+        $data = User::with("reviews")->find($user);
 
 
         return response([
@@ -347,14 +347,5 @@ class UserController extends Controller
             'msg' => 'Success'
         ]);
 
-    }
-    public function getUser(User $user){
-        $data = $user;
-
-        return response([
-            'status'=> 200,
-            'data' => $data,
-            'msg' => 'Success'
-        ]);
     }
 }

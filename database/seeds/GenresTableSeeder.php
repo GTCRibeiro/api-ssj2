@@ -2,7 +2,7 @@
 
 use Illuminate\Database\Seeder;
 
-class GenreTableSeeder extends Seeder
+class GenresTableSeeder extends Seeder
 {
     /**
      * Run the database seeds.
@@ -11,22 +11,22 @@ class GenreTableSeeder extends Seeder
      */
     public function run()
     {
-        \App\Genre::create(
+        \App\Model\Genre::create(
             [
                 'name' => 'RPG',
             ]
         );
-        \App\Genre::create(
+        \App\Model\Genre::create(
             [
                 'name' => 'Fighting game',
             ]
         );
-        \App\Genre::create(
+        \App\Model\Genre::create(
             [
                 'name' => 'ShootBrawl&SomethingElse',
             ]
         );
-        \App\Genre::create(
+        \App\Model\Genre::create(
             [
                 'name' => 'Shooter',
             ]

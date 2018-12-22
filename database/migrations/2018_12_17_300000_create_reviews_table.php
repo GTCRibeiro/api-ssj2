@@ -4,30 +4,30 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateGamessj2sTable extends Migration
+class CreateReviewsTable extends Migration
 {
     /**
      * Run the migrations.
      *
      * @return void
      */
-
     public function up()
     {
-        Schema::create('game_ssj2s', function (Blueprint $table) {
+        Schema::create('reviews', function (Blueprint $table) {
             $table->increments('id');
 
             $table->string('title');
-            $table->string ('name');
             $table->text ('description');
-            $table->string ('image')->default('gameImgs/same.png');
-            $table->string ('review');
-            $table->integer ('user_id');
-            $table->integer ('genre_id');
+            $table->string ('image')->default('');
+            $table->text ('review');
+            $table->foreign ('user_id')->references('id')->on('users')->onDelete('cascade');
+            $table->integer('user_id')->unsigned()->index();
+            //$table->foreign ('genre_id')->references('id')->on('genre')->onDelete('cascade');
+            // $table->integer ('genre_id')->unsigned()->index();
+            $table->foreign ('game_id')->references('id')->on('games')->onDelete('cascade');
+            $table->integer ('game_id')->unsigned();
+
             /*
-            //Genre Relation
-            $table->integer('genre_id')->unsigned();
-            $table->foreign('id')->references('genre_id')->on('genre');
 
             //Studio Relation
             $table->integer('studio_id')->unsigned();
@@ -38,7 +38,7 @@ class CreateGamessj2sTable extends Migration
             $table->foreign('soundtrack_id')->references('id')->on('soundtrack');
             */
             $table->timestamps();
-            //$table->softDeletes();
+            $table->softDeletes();
         });
     }
 
@@ -47,9 +47,8 @@ class CreateGamessj2sTable extends Migration
      *
      * @return void
      */
-
     public function down()
     {
-        Schema::dropIfExists('game_ssj2s');
+        Schema::dropIfExists('reviews');
     }
 }

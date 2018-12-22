@@ -17,17 +17,34 @@ header( 'Access-Control-Allow-Headers: *' );
 | is assigned the "api" middleware group. Enjoy building your API!
 |
 */
+//Users
 Route::resource("users", "UserController");
 Route::get("users/{user}", array('middleware' => 'cors', 'uses' => "UserController@show"));
-//Route::resource("reviews", "Game_ssj2sController");
-Route::Resource("reviews", "Game_ssj2sController");
-Route::get('review/{user}', 'Game_ssj2sController@show');
-Route::get('/user/{user}/reviews', 'UserController@getUserGames');
+Route::get('/users/{user}/reviews', 'UserController@getUserGames');
+
 //Route::get('/user/{user}', 'UserController@getUser');
 //Route::get("/authUser", "UserController@getAuthUser");
 Route::get("/authUser", array('middleware' => 'cors', 'uses' => 'UserController@getAuthUser'));
 //->middleware('auth:api');
+
+//Reviews
+Route::Resource("reviews", "ReviewController");
+Route::get("review", "ReviewController@getGamesUser");
+
+//Route::get('review/{id}', array('middleware' => 'cors', 'uses' => "ReviewController@show"));
+//Route::resource("reviews", "ReviewController");
+
+//Genres
 Route::resource("genres", "GenreController");
-Route::get("genre/{id}", "GenreController@getGames");
+Route::get("genres/{id}/games", "GenreController@GetGames");
+
+//Games
+Route::resource("games", "GameController");
+Route::get("games/{id}/reviews", "GameController@GetReviews");
+
+
+
+
+//Route::get("/")
 
 //Route::get('example', array('middleware' => 'cors', 'uses' => 'ExampleController@dummy'));
